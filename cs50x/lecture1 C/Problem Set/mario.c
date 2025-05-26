@@ -17,7 +17,6 @@ int main(void)
         print(i, h);
     }
 }
-
 // 根据高度逐行打印
 void print(int cur, int height)
 {
