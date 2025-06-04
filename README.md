@@ -22,9 +22,9 @@
 
 | 类别 | 内容 |
 |------|------|
-| ✅ 正在游玩 | Dota2 ｜ 炉石传说 ｜ 流放之路2 ｜ 33号远征队 ｜ 梅尔沃放置 |
-| 💡 特别期待 | 剑星（PC）｜ 匹诺曹DLC ｜ 明末 ｜ 昭和米国物语 ｜ 上古世纪编年史 ｜ Chrono Odyssey ｜ 杀戮尖塔2 |
-| 🔕 已退坑 | 手游 & 腾讯系游戏 —— 从小玩到大，已然圆满 🙏 |
+| ✅ 正在游玩  | Dota2 ｜ 炉石传说 ｜ 流放之路2 ｜ 33号远征队 ｜ 梅尔沃放置 |
+| 💡 特别期待  | 剑星（PC）｜ 匹诺曹DLC ｜ 明末 ｜ 昭和米国物语 ｜ 上古世纪编年史 ｜ Chrono Odyssey ｜ 杀戮尖塔2 |
+| 🔕 已退坑  | 手游 & 腾讯系游戏 —— 从小玩到大，已然圆满 🙏 |
 
 ---
 
@@ -55,10 +55,10 @@
 
 ## 📂 仓库结构（持续更新中）
 
-- [`DailyPractice/`](./DailyPractice/)：每日练习与各类课程代码目录  
-  - [`cs50x/`](./DailyPractice/cs50x/)：Harvard CS50x 课程练习  
-  - [`cs61a/`](./DailyPractice/cs61a/)：UC Berkeley CS61A(Python)课程内容  
-  - [`helloworld/`](./DailyPractice/helloworld/)：Python / Java / C / C++ Helloworld(配环境成功纪念)
+- [`DailyPractice/`](./)：每日练习与各类课程代码目录  
+  - [`cs50x/`](./cs50x/)：Harvard CS50x 课程练习  
+  - [`cs61a/`](./cs61a/)：UC Berkeley CS61A(Python)课程内容  
+  - [`helloworld/`](./helloworld/)：Python / Java / C / C++ Helloworld(配环境成功纪念)
 
 ---
 
