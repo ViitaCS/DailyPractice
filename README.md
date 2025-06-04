@@ -20,24 +20,11 @@
 
 ## 🎮 当前爱好 & 游戏状态
 
-<table>
-  <tr>
-    <th style="white-space:nowrap;">类别</th>
-    <th>内容</th>
-  </tr>
-  <tr>
-    <td style="white-space:nowrap;">✅ 正在游玩</td>
-    <td>Dota2 ｜ 炉石传说 ｜ 流放之路2 ｜ 33号远征队 ｜ 梅尔沃放置</td>
-  </tr>
-  <tr>
-    <td style="white-space:nowrap;">💡 特别期待</td>
-    <td>剑星（PC）｜ 匹诺曹DLC ｜ 明末 ｜ 昭和米国物语 ｜ 上古世纪编年史 ｜ Chrono Odyssey ｜ 杀戮尖塔2</td>
-  </tr>
-  <tr>
-    <td style="white-space:nowrap;">🔕 已退坑</td>
-    <td>手游 & 腾讯系游戏 —— 从小玩到大，已然圆满 🙏</td>
-  </tr>
-</table>
+| 状态 | 内容 |
+|------|------|
+| ✅ 游玩中 | Dota2 ｜ 炉石传说 ｜ 流放之路2 ｜ 33号远征队 ｜ 梅尔沃放置 |
+| 💡 期待中 | 剑星（PC）｜ 匹诺曹DLC ｜ 明末 ｜ 昭和米国物语 ｜ 上古世纪编年史 ｜ Chrono Odyssey ｜ 杀戮尖塔2 |
+| 🔕 已退坑 | 手游 & 腾讯系游戏 —— 从小玩到大，已然圆满 🙏 |
 
 ---
 
