@@ -59,7 +59,7 @@
   - [`cs50x/`](./cs50x/)：Harvard CS50x 课程练习  
   - [`cs61a/`](./cs61a/)：UC Berkeley CS61A(Python)课程内容  
   - [`helloworld/`](./helloworld/)：Python / Java / C / C++ Helloworld(配环境成功纪念)
-
+  - [`paper`](./paper/)：入学前论文算法实现任务
 ---
 
 ## 🧩 计划中或未来会加入...
