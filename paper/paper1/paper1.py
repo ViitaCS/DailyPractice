@@ -119,7 +119,7 @@ def measure_memory():
 
 # === 评测 ===
 def evaluate(graph_file, query_file, use_ppl=False):
-    print(f"\n==== {'PPL' if use_ppl else 'PLL'} 测试 ====")
+    print(f"{'PPL' if use_ppl else 'PLL'}")
     graph, rev_graph, n = load_graph_from_custom_txt(graph_file)
     edge_count = sum(len(adj) for adj in graph)
     print(f"顶点数: {n}")
