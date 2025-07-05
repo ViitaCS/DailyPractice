@@ -40,67 +40,148 @@ def intersect_sorted(a, b):
             j += 1
     return False
 
-# === PLL索引构建 ===
+# === PLL索引构建（优化剪枝版） ===
 def pll_index(graph, rev_graph, n):
     LOUT = [[] for _ in range(n)]
     LIN = [[] for _ in range(n)]
-    def d_in_out(v):
-        return (len(rev_graph[v]) + 1) * (len(graph[v]) + 1)
-    order = sorted(range(n), key=d_in_out, reverse=True)
-    for v in order:
-        visited = set()
-        queue = deque([v])
-        while queue:
-            u = queue.popleft()
-            if u in visited: continue
-            visited.add(u)
-            if intersect_sorted(LOUT[v], LIN[u]): continue
-            insert_sorted(LIN[u], v)
-            queue.extend(graph[u])
-        visited.clear()
-        queue = deque([v])
-        while queue:
-            u = queue.popleft()
-            if u in visited: continue
-            visited.add(u)
-            if intersect_sorted(LOUT[u], LIN[v]): continue
-            insert_sorted(LOUT[u], v)
-            queue.extend(rev_graph[u])
-    return LOUT, LIN
 
-# === PPL索引构建（简化） ===
-def ppl_index(graph, rev_graph, n):
-    LOUT = [[] for _ in range(n)]
-    LIN = [[] for _ in range(n)]
-    def d_in_out(v):
-        return (len(rev_graph[v]) + 1) * (len(graph[v]) + 1)
-    order = sorted(range(n), key=d_in_out, reverse=True)
+    # 顺序排序（根据出入度）
+    order = sorted(range(n), key=lambda v: (len(rev_graph[v]) + 1) * (len(graph[v]) + 1), reverse=True)
+
     for v in order:
-        visited = set()
+        visited = [False] * n
+
+        # 正向BFS：构建 LIN
         queue = deque([v])
         while queue:
             u = queue.popleft()
-            if u in visited: continue
-            visited.add(u)
+            if visited[u]: continue
+            visited[u] = True
+
             if intersect_sorted(LOUT[v], LIN[u]):
                 continue
             insert_sorted(LIN[u], v)
             queue.extend(graph[u])
-        visited.clear()
+
+        visited = [False] * n
+
+        # 反向BFS：构建 LOUT
         queue = deque([v])
         while queue:
             u = queue.popleft()
-            if u in visited: continue
-            visited.add(u)
-            if intersect_sorted(LIN[v], LOUT[u]):
+            if visited[u]: continue
+            visited[u] = True
+
+            if intersect_sorted(LOUT[u], LIN[v]):
                 continue
             insert_sorted(LOUT[u], v)
             queue.extend(rev_graph[u])
+
+    return LOUT, LIN
+
+# === PPL索引构建（优化路径标记剪枝版） ===
+def ppl_index(graph, rev_graph, n):
+    LOUT = [{} for _ in range(n)]  # dict: path_id -> position
+    LIN = [{} for _ in range(n)]
+
+    # 改进的路径选择策略：选择最长的链式路径
+    paths = []
+    used = [False] * n
+    
+    # 按出度排序，优先选择出度小的节点作为路径起点
+    candidates = sorted(range(n), key=lambda v: len(graph[v]))
+    
+    for v in candidates:
+        if used[v] or len(graph[v]) == 0:
+            continue
+            
+        # 寻找最长链式路径
+        path = []
+        u = v
+        while not used[u] and len(graph[u]) == 1:
+            path.append(u)
+            used[u] = True
+            u = graph[u][0]
+            if u >= n or u in path:  # 避免循环
+                break
+                
+        if len(path) >= 3:  # 只保留长度>=3的路径
+            paths.append(path)
+    
+    # 限制路径数量，避免过多路径
+    if len(paths) > n // 10:  # 最多保留 n/10 条路径
+        paths = sorted(paths, key=len, reverse=True)[:n//10]
+    
+    for pid, path in enumerate(paths):
+        plen = len(path)
+
+        # 正向 BFS：构建 LIN（优化剪枝）
+        for j in reversed(range(plen)):
+            src = path[j]
+            visited = [False] * n
+            queue = deque([src])
+            
+            while queue:
+                u = queue.popleft()
+                if visited[u]: continue
+                visited[u] = True
+                
+                # 优化剪枝条件：检查是否已有更优的路径覆盖
+                skip = False
+                for existing_pid in LIN[u]:
+                    if existing_pid < pid:  # 只检查已处理的路径
+                        continue
+                    if existing_pid in LOUT[src]:
+                        skip = True
+                        break
+                
+                if skip:
+                    continue
+                    
+                LIN[u][pid] = j
+                queue.extend(graph[u])
+
+        # 反向 BFS：构建 LOUT（优化剪枝）
+        for j in range(plen):
+            src = path[j]
+            visited = [False] * n
+            queue = deque([src])
+            
+            while queue:
+                u = queue.popleft()
+                if visited[u]: continue
+                visited[u] = True
+                
+                # 优化剪枝条件：检查是否已有更优的路径覆盖
+                skip = False
+                for existing_pid in LOUT[u]:
+                    if existing_pid < pid:  # 只检查已处理的路径
+                        continue
+                    if existing_pid in LIN[src]:
+                        skip = True
+                        break
+                
+                if skip:
+                    continue
+                    
+                LOUT[u][pid] = j
+                queue.extend(rev_graph[u])
+
     return LOUT, LIN
 
 # === 查询 ===
 def query(s, t, LOUT, LIN):
-    return intersect_sorted(LOUT[s], LIN[t])
+    # PLL 情况：标签是 list
+    if isinstance(LOUT[s], list):
+        return intersect_sorted(LOUT[s], LIN[t])
+    # PPL 情况：标签是 dict（path_id -> position）
+    elif isinstance(LOUT[s], dict):
+        for pid in LOUT[s]:
+            if pid in LIN[t] and LOUT[s][pid] <= LIN[t][pid]:
+                return True
+        return False
+    else:
+        raise TypeError("Unsupported label type")
 
 # === 查询数据加载 ===
 def load_query_pairs(path):
