@@ -1,56 +1,65 @@
 #include <iostream>
+#include <queue>
 #include <vector>
 using namespace std;
 
 class Solution {
 public:
-  int trap(vector<int> &height) {
-    int n = height.size();
-    if (n < 3)
-      return 0;
-
-    int left = 0, right = n - 1;
-    int left_max = 0, right_max = 0;
-    int ans = 0;
-
-    while (left < right) 
+  vector<vector<int>> kSmallestPairs(vector<int> &nums1, vector<int> &nums2,int k) 
+  {
+    if (nums1.empty() || nums2.empty() || k == 0)
+      return {};
+    auto cmp = [&](const pair<int, int> &a, const pair<int, int> &b) 
     {
-      if (height[left] < height[right]) 
+      return nums1[a.first] + nums2[a.second] >
+             nums1[b.first] + nums2[b.second];
+    };
+    priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> pq(cmp);
+    int m = nums1.size();
+    for (int i = 0; i < min(m, k); ++i) 
+    {
+      pq.push({i, 0});
+    }
+    vector<vector<int>> res;
+    while (k > 0 && !pq.empty()) 
+    {
+      auto top = pq.top();
+      int i = top.first;
+      int j = top.second;
+      pq.pop();
+      res.push_back({nums1[i], nums2[j]});
+      k--;
+      if (j + 1 < nums2.size()) 
       {
-        if (height[left] >= left_max) 
-        {
-          left_max = height[left]; 
-        } 
-        else 
-        {
-          ans += left_max - height[left];
-        }
-        left++; 
-      }
-      else 
-      {
-        if (height[right] >= right_max) 
-        {
-          right_max = height[right]; 
-        } 
-        else 
-        {
-          ans += right_max - height[right]; 
-        }
-        right--; 
+        pq.push({i, j + 1});
       }
     }
-    return ans;
+    return res;
   }
 };
 
 int main() {
-  int h;
-  vector<int> v;
-  while (cin >> h) {
-    v.push_back(h);
+  int n, m, data, k;
+  vector<int> nums1, nums2;
+  cin >> n;
+  for (int i = 0; i < n; ++i) 
+  {
+    cin >> data;
+    nums1.push_back(data);
   }
-  int res = Solution().trap(v);
-  cout << res << endl;
+  cin >> m;
+  for (int i = 0; i < m; ++i) 
+  {
+    cin >> data;
+    nums2.push_back(data);
+  }
+  cin >> k;
+  vector<vector<int>> res = Solution().kSmallestPairs(nums1, nums2, k);
+  for (int i = 0; i < res.size(); ++i)
+  {
+    if (i > 0)
+      cout << " ";
+    cout << res[i][0] + res[i][1];
+  }
   return 0;
 }
