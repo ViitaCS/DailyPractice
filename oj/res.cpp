@@ -1,65 +1,113 @@
 #include <iostream>
-#include <queue>
-#include <vector>
 using namespace std;
 
-class Solution {
+struct ListNode 
+{
+  int val;
+  ListNode *next;
+  ListNode() : val(0), next(nullptr) {}
+  ListNode(int x) : val(x), next(nullptr) {}
+  ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution 
+{
 public:
-  vector<vector<int>> kSmallestPairs(vector<int> &nums1, vector<int> &nums2,int k) 
+  ListNode *removeNth(ListNode *head, int n) 
   {
-    if (nums1.empty() || nums2.empty() || k == 0)
-      return {};
-    auto cmp = [&](const pair<int, int> &a, const pair<int, int> &b) 
+    if (head == nullptr)
+      return nullptr;
+
+    ListNode *dummy = new ListNode(0);
+    dummy->next = head;
+    ListNode *slow = dummy;
+    ListNode *fast = dummy;
+    int L = n; 
+    for (int i = 0; i < n; i++) 
     {
-      return nums1[a.first] + nums2[a.second] >
-             nums1[b.first] + nums2[b.second];
-    };
-    priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> pq(cmp);
-    int m = nums1.size();
-    for (int i = 0; i < min(m, k); ++i) 
-    {
-      pq.push({i, 0});
-    }
-    vector<vector<int>> res;
-    while (k > 0 && !pq.empty()) 
-    {
-      auto top = pq.top();
-      int i = top.first;
-      int j = top.second;
-      pq.pop();
-      res.push_back({nums1[i], nums2[j]});
-      k--;
-      if (j + 1 < nums2.size()) 
+      if (fast == nullptr)
+        break;
+      fast = fast->next;
+      if (i < n - 1) 
       {
-        pq.push({i, j + 1});
+        slow = slow->next;
       }
     }
-    return res;
+    ListNode *prev1 = slow;   
+    ListNode *target1 = fast; 
+    ListNode *p = dummy;
+    ListNode *current = fast; 
+    while (current != nullptr && current->next != nullptr)
+    {
+      p = p->next;
+      current = current->next;
+      L++;
+    }
+    ListNode *prev2 = p;         
+    ListNode *target2 = p->next; 
+    int pos1 = n;
+    int pos2 = L - n + 1;
+    if (target1 == target2) 
+    {
+      prev1->next = target1->next;
+    } 
+    else 
+    {
+      if (pos1 < pos2) 
+      {
+        prev2->next = target2->next;
+        prev1->next = prev1->next->next;
+      } 
+      else 
+      {
+        prev1->next = target1->next;
+        prev2->next = prev2->next->next;
+      }
+    }
+    ListNode *result = dummy->next;
+    delete dummy;
+    return result;
   }
 };
 
-int main() {
-  int n, m, data, k;
-  vector<int> nums1, nums2;
+ListNode *createByTail() 
+{
+  ListNode *head;
+  ListNode *p1, *p2;
+  int n = 0, num;
+  int len;
+  cin >> len;
+  head = nullptr;
+  while (n < len && cin >> num) {
+    p1 = new ListNode(num);
+    n++;
+    if (n == 1)
+      head = p1;
+    else
+      p2->next = p1;
+    p2 = p1;
+  }
+  return head;
+}
+
+void displayLink(ListNode *head) 
+{
+  ListNode *p;
+  p = head;
+  cout << "head-->";
+  while (p != nullptr) {
+    cout << p->val << "-->";
+    p = p->next;
+  }
+  cout << "tail\n";
+}
+
+int main() 
+{
+  ListNode *head = createByTail();
+  int n;
   cin >> n;
-  for (int i = 0; i < n; ++i) 
-  {
-    cin >> data;
-    nums1.push_back(data);
-  }
-  cin >> m;
-  for (int i = 0; i < m; ++i) 
-  {
-    cin >> data;
-    nums2.push_back(data);
-  }
-  cin >> k;
-  vector<vector<int>> res = Solution().kSmallestPairs(nums1, nums2, k);
-  for (int i = 0; i < res.size(); ++i)
-  {
-    if (i > 0)
-      cout << " ";
-    cout << res[i][0] + res[i][1];
-  }
+  head = Solution().removeNth(head, n);
+  displayLink(head);
   return 0;
 }
