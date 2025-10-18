@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "C++: Build active file (g++)",
+        "type": "shell",
+        "command": "g++",
+        "args": [
+          "-std=c++17",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "${file}",
+          "-o",
+          "${fileDirname}\\${fileBasenameNoExtension}.exe"
+        ],
+        "group": { "kind": "build", "isDefault": true },
+        "problemMatcher": ["$gcc"],
+        "detail": "Use g++ to build the active C++ file"
+      },
+      {
+        "label": "Run active program",
+        "type": "shell",
+        "dependsOn": "C++: Build active file (g++)",
+        "command": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "options": { "cwd": "${fileDirname}" }
+      }
+    ]
+  }
+  
