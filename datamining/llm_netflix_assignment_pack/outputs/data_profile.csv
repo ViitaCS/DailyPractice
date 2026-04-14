@@ -1,0 +1,13 @@
+﻿column,dtype,missing_count,missing_ratio,nunique
+director,object,1969,0.3158,3301
+cast,object,570,0.0914,5469
+country,object,476,0.0764,554
+date_added,object,11,0.0018,1524
+rating,object,10,0.0016,14
+description,object,0,0.0,6226
+duration,object,0,0.0,201
+listed_in,object,0,0.0,461
+release_year,int64,0,0.0,72
+show_id,int64,0,0.0,6234
+title,object,0,0.0,6172
+type,object,0,0.0,2
